@@ -10,7 +10,7 @@
 ## Person Follower
 
 1. High-level Description: The Turtlebot needs to move in response to data from the scan. We find the closest object detected by the scan, and using the angle given, determine how to turn and move forward. To do this we define two error terms, one for the absolute distance from the object and one for the trajectory/angle towards the object. 
-2. Code Exmplanation: We execute this using two main functions: init and scan_callback. Init does what many other init functions do, defining a subscriber for the /scan topic and a publisher to the cmd_vel topic. 
+2. Code Exmplanation: We execute this using two main functions: init and scan_callback. Init does what many other init functions do, defining a subscriber for the /scan topic and a publisher to the cmd_vel topic. Scan_callback is similar to the callback function used in the stop_at_wall exercise from class. We read all the data from the list "ranges", and find the minimum. If the minimum is infinity, no object is detected, so we publish an empty twist (halt any movement). If this distance is finite, the index of the minimum indicates the closest/most direct angle towards the object. We consider three cases, depending on the index. If the min is in the first or last ten indices of ranges, that indicates the object is (roughly) in front of Turtlebot, so we set angular velocity to 0. If the min is between 11 and 179, the object is on the left so we set angular veloctiy to a positive 0.3. Otherwise, the object is to Turtlebot's right, and we set angular velocity to -0.3. Using these two error terms, we can self correct the course of Turtlebot to always "home in" on the object.
 3. ![Person_follow_gif](https://github.com/Zwky26/warmup_project/blob/main/gifs/person_follow.gif)
 
 
