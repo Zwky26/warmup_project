@@ -16,7 +16,7 @@
 ## Wall Follower
 
 1. High-Level Description: Following a wall involves two basic conditions. We need to verify if the closest wall is in fact on our right (although it could also be left, imagine British vs American sidewalks). We also need to verify that the distance between the Turtlebot and wall is some set distance away. Once these two qualities are verified we drive forward. We can use a distance and angle error term to correct the current position of the Turtlebot to meet these conditions. 
-2. Code Explanation:
+2. Code Explanation: Besides the init and run functions, which are identical to the init and run functions of PersonFollower, we have three helper functions that are called, depending on the checks of the conditions from the high-level description: orientate, drive forward, and drive closer. If the closest wall is not on the right, we call orientate, turning in place until the minimum of the scan (closest object) is aroud the 270 degree mark. If we are orientated correctly, we check the distance. If we are in the sweet spot (0.4 to 0.8 away from the wall) we just drive forward, parallel to the wall. If we are not in the sweet spot, we turn ever-so-slightly so we "spiral" closer to the sweet spot, while still following the wall. 
 3. ![Wall_follow_gif](https://github.com/Zwky26/warmup_project/blob/main/gifs/wall_follower.gif)
 
 ## Challenges
@@ -25,4 +25,11 @@ I think the biggest challenge for me was the transition to heuristic programming
 
 ## Future Work
 
-My wall follower solution has the most room for improvement. To get to the point of following the walls, it makes a large, spiral motion that is jerk-y and slow. 
+My wall follower solution has the most room for improvement. Before we get close to the walls, Turtlebot makes a large, outward spiral motion that is jerk-y and slow. To make this smoother, it is a matter of tweaking the constants for drive_closer. We could make it a two-degree error term so that it has a smoother turn, adjust the sweet spot zone to be larger/more accomodating, and change the other functions' linear x term to be cumulative rather than setting it to 0. We could also add a very small angular term to drive_forward, taking into account for the distance from the wall (if we are not exactly 0.6 away from the wall, make a very slight turn). Each of these changes would be to reduce the wobbly corrections that are currently seen. Additionally, we could add in a specific test case for being wedged into a corner. Our solution handles this case by wiggling until one wall is chosen, but we could have a specific method called for when this occurs to make the transition smoother. 
+
+## Takeaways
+
+1. One major lesson learned is how to balance my approach to problems. For the first problem, I spent the significant majority of my time on preplanning the solution. I wrote down the high-level theoretical ideas, then spent a short amount on coding. Because the square problem was pretty straightforward, not much debugging was needed. However, for the second problem, this approach didn't seem to work as nicely. I found that using time researching/reading documentation on packages was less efficient than just trying simple code, using the built-in ros functions to analyze the inputs and outputs. Having learned this lesson, I tried to apply the same code-first test-later approach to Wall Follower. However, I found again that some theoretical planning, about what it means to "follow a wall" would've helped me, or even stopped me from going down the wrong path of thinking. So keeping in mind the balance between simple coding to start and not getting caught in the weeds of preplanning.  
+2. Another major lesson learned is how to better debug my solution. I originally just ran it, looked to see if the solution worked, then did that for a few odder starting placements. This worked fine for the first two problems, but for the more complex wall follower this method did not provide much insight. Instead, I learned that modularizing methods and testing just one part at a time worked much better in terms of telling me what to fix. I would publish the twist I thought would be needed, and for every other case simply publish a blank twist, halting the Turtlebot. This way, I could test every individual function without too much thought needed.
+
+
