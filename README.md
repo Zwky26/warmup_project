@@ -16,8 +16,13 @@
 ## Wall Follower
 
 1. High-Level Description: Following a wall involves two basic conditions. We need to verify if the closest wall is in fact on our right (although it could also be left, imagine British vs American sidewalks). We also need to verify that the distance between the Turtlebot and wall is some set distance away. Once these two qualities are verified we drive forward. We can use a distance and angle error term to correct the current position of the Turtlebot to meet these conditions. 
-2. 
+2. Code Explanation:
+3. ![Wall_follow_gif](https://github.com/Zwky26/warmup_project/blob/main/gifs/wall_follower.gif)
 
 ## Challenges
 
 I think the biggest challenge for me was the transition to heuristic programming. I am used to deterministic results, so when my Drive_Square program kept changing results, despite minor adjustments, I felt confused. I tried debugging using rostpoic echo, and other printing statements, but soon realized they reported the same thing each time. After reading more on the Slack channel, I tried trial-and-error debugging, tweaking the velocities and time constants, which ended up being more effective. When programming the Person Follower, I found myself trying to find context/info on the packages and how 360 degree scans worked, when I realized just trying out the program itself would offer more insight to how it works. 
+
+## Future Work
+
+My wall follower solution has the most room for improvement. To get to the point of following the walls, it makes a large, spiral motion that is jerk-y and slow. 
