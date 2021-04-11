@@ -14,8 +14,8 @@ class Follower:
                 self.pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
 
         def scan_callback(self, msg):
-                #want to find the minimum of all elements in scan
-                #this should tell us which way the wall is
+                #two conditions need to be met before we drive forward
+                #right side is closest to wall, distance in sweet spot
                 dist = min(msg.ranges)
                 min_Ind = msg.ranges.index(dist)
                 if min_Ind in range(245, 305):
@@ -27,6 +27,7 @@ class Follower:
                     self.orient(min_Ind)
 
         def orient(self, ind):
+            #turns until the closest wall is on right side of turtlebot
             self.twist.linear.x = 0
             if ind in range(135, 254):
                 self.twist.angular.z = -0.2 
@@ -35,11 +36,16 @@ class Follower:
             self.pub.publish(self.twist)
 
         def drive_forward(self):
+            #all conditions are a go, just drive forward
             self.twist.linear.x = 0.2
             self.twist.angular.z = 0
             self.pub.publish(self.twist)
 
         def drive_closer(self, distance):
+            #wall is in right spot, but distance is not sweet spot
+            #very slight adjustment to angle
+            #note that this is VERY slow at start, bc it makes a big spiral
+            #after close to wall serves as corrective turns 
             if distance > 0.8:
                 self.twist.angular.z = -0.1
             else:
@@ -48,7 +54,8 @@ class Follower:
             self.pub.publish(self.twist)
 
         def run(self):
-                rospy.spin()
+            #keeps it running
+            rospy.spin()
                 
 if __name__ == '__main__':
 
